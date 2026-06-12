@@ -7,12 +7,15 @@ LETTERS = "АБВГДЕЖЗИЙКЛМНОПРСТУФХЦЧШЩЪЫЬЭЮЯ"
 WORD_COLORS = ["#76ddef", "#66d1c5", "#8800ff", "#95c2f4", "#7836e9", "#5a6cae", "#ce8dd9", "#5d5fc8"]
 
 WORDS = [
-    "КОТ", "ДОМ", "ЛЕС", "СОЛНЦЕ", "ЛУНА", "ЗВЕЗДА", "МОРЕ", "ГОРА", "РЕКА", "ПОЛЕ", "КОЛЕСО", "РАСХОД", "СНЕГИРЬ",
-    "ПИТОН", "АЛГОРИТМ", "ПРОГРАММА", "КОМПЬЮТЕР", "РАЗРАБОТЧИК", "ИНТЕРФЕЙС", "МЕСЯЦ", "БАСКЕТБОЛ", "ФУТБОЛ", "ФАКЕЛ", "РАКУШКА",
-    "СОБАКА", "КОШКА", "ЗАЯЦ", "ЛИСА", "ВОЛК", "МЕДВЕДЬ", "ТИГР", "ЛЕВ", "ЙОГУРТ", "ПЛАСТИЛИН", "ТОПОТ", "РАЗУМ", "СУФЛЕ", "ПОЧВА",
-    "МАШИНА", "САМОЛЕТ", "ПОЕЗД", "КОРАБЛЬ", "ВЕЛОСИПЕД", "АВТОБУС", "ПИТОМЕЦ", "МЫЛО", "УЮТ", "КЛЮКВА", "УЗЕЛ", "ГОСТЬ", "КУСТ",
-    "ВЕСНА", "ЛЕТО", "ОСЕНЬ", "ЗИМА", "МАМА", "ПАПА", "БРАТ", "СЕСТРА", "ХОККЕЙ", "ЗВЕЗДА", "КАМЕРА", "МОРЯК", "ВОКЗАЛ", "ЛИМОНАД",
-    "СЧАСТЬЕ", "ЛЮБОВЬ", "КИТ", "ЛЕД", "ФИГУРА", "ЗОЛА", "САПФИР", "ГРАМОТА", "ДРУЖБА", "МИР", "ХЛЕБ", "МОЛОКО", "УЧИТЕЛЬ", "КНИГА", "РУЧКА", "ТЕТРАДЬ", "СТУЛ", "СТОЛ", "ОКНО", "ДВЕРЬ", "БЕЛКА", "ОПЫТ", "ТЕЛЕФОН", "РОБОТ", "ФУТБОЛ", "ХОККЕЙ", "МУЗЫКА", "ПЕСНЯ", "ДЕРЕВО"
+    "КОТ", "ДОМ", "ЛЕС", "СОЛНЦЕ", "ЛУНА", "ЗВЕЗДА", "МОРЕ", "ГОРА", "РЕКА", "ПОЛЕ", "КОЛЕСО", "РАСХОД", "СНЕГИРЬ","БАРСУК", "БОБР", "ВЫДРА", "ЕНОТ", "ХОМЯК", "КРОЛИК", "ЛОСЬ", "ОЛЕНЬ", "НОРКА", "СУРОК", 
+    "ТЮЛЕНЬ", "МОРЖ", "ДЕЛЬФИН", "ВОРОБЕЙ", "ВОРОНА", "СОРОКА", "ДЯТЕЛ", "СОВА", "ФИЛИН", "ЯСТРЕБ", "СОКОЛ", "ОРЁЛ", "ЛЕБЕДЬ", "УТКА", "ГУСЬ", "БЕРЁЗА", "ОСИНА", "ДУБ", 
+    "КЛЁН", "ЛИПА", "СОСНА", "ЕЛЬ", "ПИХТА", "КЕДР", "ЯБЛОКО", "ГРУША", "ВИШНЯ", "СЛИВА", "АПЕЛЬСИН", "ЛИМОН", "БАНАН", "КИВИ", "ВИНОГРАД", "АРБУЗ", "ДЫНЯ", "КЛУБНИКА", "МАЛИНА", 
+    "ОГУРЕЦ", "ПОМИДОР", "МОРКОВЬ", "СВЁКЛА", "ТЫКВА", "КУКУРУЗА", "ТЕЛЕВИЗОР", "ХОЛОДИЛЬНИК", "МИКРОВОЛНОВКА", "ПЫЛЕСОС", "СТИРАЛКА", "ФЕН", "УТЮГ", "БАСКЕТБОЛ", "ВОЛЕЙБОЛ", "ТЕННИС", 
+    "БАДМИНТОН", "ПЛАВАНИЕ", "ЛЫЖИ", "КОНЬКИ", "ФУТБОЛ", "ХОККЕЙ", "АЛГОРИТМ", "ПРОГРАММА", "КОМПЬЮТЕР", "САПФИР","ВЕТЕР", "ДОЖДЬ", "СНЕГ", "ГРАД", "ТУМАН", "МОЛНИЯ", "ГРОМ", "РАДУГА", "ОБЛАКО", 
+    "ГОРИЗОНТ", "ВОСХОД", "МЕСЯЦ", "БАСКЕТБОЛ", "ФУТБОЛ", "ФАКЕЛ", "РАКУШКА", "СОБАКА", "КОШКА", "ЗАЯЦ", "ЛИСА", "ВОЛК", "МЕДВЕДЬ", "ТИГР", "ЛЕВ", "ЙОГУРТ", 
+    "ПЛАСТИЛИН", "ТОПОТ", "РАЗУМ", "СУФЛЕ", "ПОЧВА", "МАШИНА", "САМОЛЕТ", "ПОЕЗД", "КОРАБЛЬ", "ВЕЛОСИПЕД", "АВТОБУС", "ПИТОМЕЦ", "МЫЛО", "УЮТ", "КЛЮКВА", "УЗЕЛ", "ГОСТЬ", "КУСТ",
+    "ВЕСНА", "ЛЕТО", "ОСЕНЬ", "ЗИМА", "МАМА", "ПАПА", "БРАТ", "СЕСТРА", "ХОККЕЙ", "ЗВЕЗДА", "КАМЕРА", "МОРЯК", "ВОКЗАЛ", "ЛИМОНАД","СЧАСТЬЕ", "ЛЮБОВЬ", "КИТ", "ЛЕД", "ФИГУРА",  
+    "ДРУЖБА", "МИР", "ХЛЕБ", "МОЛОКО", "УЧИТЕЛЬ", "КНИГА", "РУЧКА", "ТЕТРАДЬ", "СТУЛ", "СТОЛ", "ОКНО", "ДВЕРЬ", "БЕЛКА", "ОПЫТ", "ТЕЛЕФОН", "РОБОТ", "ФУТБОЛ", "ХОККЕЙ", "МУЗЫКА", "ПЕСНЯ", "ДЕРЕВО"
 ]
 
 DIRECTIONS = [(0, 1), (1, 0), (-1, 0)]
@@ -110,24 +113,24 @@ class WordSearchGame:
         info_frame.pack(side="left")
 
         self.timer_label = tk.Label(info_frame, text="Время: 00:00",
-                                    font=("Arial", 18, "bold"), bg="#f8f9fa", fg="#403697")
+                                    font=("Arial", 18, "bold"), bg="#f8f9fa", fg="#332387")
         self.timer_label.pack(side="left", padx=20)
 
         self.hints_label = tk.Label(info_frame, text=f"Подсказки: {self.hints_left}",
-                                    font=("Arial", 14, "bold"), bg="#f8f9fa", fg="#7336a9")
+                                    font=("Arial", 14, "bold"), bg="#f8f9fa", fg="#332387")
         self.hints_label.pack(side="left", padx=30)
 
         btn_frame = tk.Frame(top_panel, bg="#f8f9fa")
         btn_frame.pack(side="right")
 
-        tk.Button(btn_frame, text="Подсказка", font=("Arial", 11, "bold"), bg="#6092C5",
+        tk.Button(btn_frame, text="Подсказка", font=("Arial", 11, "bold"), bg="#332387",
                   fg="white", width=12, height=2, command=self.hint).pack(side="left", padx=8)
 
         central_frame = tk.Frame(self.game_frame, bg="#f8f9fa")
-        central_frame.pack(fill="both", expand=True, padx=300, pady=10)
+        central_frame.pack(fill="both", expand=True, padx=40, pady=10)
 
         self.canvas = tk.Canvas(central_frame, bg="#ffffff", highlightthickness=4,
-                                highlightbackground="#07090b", relief="solid")
+                                highlightbackground="#2c3e50", relief="solid")
         self.canvas.pack(fill="both", expand=True)
         self.canvas.bind("<Button-1>", self.on_mouse_down)
         self.canvas.bind("<B1-Motion>", self.on_mouse_drag)
@@ -135,7 +138,7 @@ class WordSearchGame:
         self.canvas.bind("<Configure>", self.on_resize)
 
         words_panel = tk.Frame(central_frame, bg="#ffffff", relief="solid", bd=3)
-        words_panel.pack(pady=15)
+        words_panel.pack(pady=(15, 0))
 
         tk.Label(words_panel, text="НАЙДИ ЭТИ СЛОВА", font=("Arial", 16, "bold"),
                  bg="#ffffff", fg="#2c3e50").pack(pady=12)
@@ -164,7 +167,7 @@ class WordSearchGame:
             frame.pack(fill="x", pady=5, padx=10)
            
             check = tk.Label(frame, text="✓" if self.found.get(word, False) else " ",
-                             font=("Arial", 15, "bold"), bg="#ffffff", fg="#6870cb", width=2)
+                             font=("Arial", 15, "bold"), bg="#ffffff", fg="#655ce8", width=2)
             check.pack(side="left")
            
             lbl = tk.Label(frame, text=word, font=("Arial", 14),
@@ -274,7 +277,7 @@ class WordSearchGame:
         if not self.field: return
         w = self.canvas.winfo_width()
         h = self.canvas.winfo_height()
-        self.cell_size = max(50, min(100, min(w, h) // self.size - 10))
+        self.cell_size = max(38, min(72, min(w, h) // self.size - 10))
         total_w = self.cell_size * self.size
         total_h = self.cell_size * self.size
         offset_x = (w - total_w) // 2
@@ -395,7 +398,7 @@ class WordSearchGame:
             for placed_word, r0, c0, dr, dc, _ in self.placed:
                 if placed_word == word:
                     self.selected_cells = [(r0, c0)]
-                    self.current_highlight_color = "#8a47ff"
+                    self.current_highlight_color = "#3a3f7e"
                     self.draw_field()
 
                     self.root.after(1500, self.clear_hint)
