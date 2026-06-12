@@ -4,7 +4,7 @@ import random
 import time
 
 LETTERS = "АБВГДЕЖЗИЙКЛМНОПРСТУФХЦЧШЩЪЫЬЭЮЯ"
-WORD_COLORS = ["#e15881", "#83e8dc", "#8800ff", "#95c2f4", "#7836e9", "#6071ad", "#4dc696", "#0ea463"]
+WORD_COLORS = ["#76ddef", "#66d1c5", "#8800ff", "#95c2f4", "#7836e9", "#5a6cae", "#ce8dd9", "#5d5fc8"]
 
 WORDS = [
     "КОТ", "ДОМ", "ЛЕС", "СОЛНЦЕ", "ЛУНА", "ЗВЕЗДА", "МОРЕ", "ГОРА", "РЕКА", "ПОЛЕ", "КОЛЕСО", "РАСХОД", "СНЕГИРЬ",
@@ -41,9 +41,9 @@ class WordSearchGame:
     def __init__(self, root):
         self.root = root
         self.root.title("Филворды - Поиск слов")
-        self.root.geometry("1100x820")
+        self.root.geometry("1100x850")
         self.root.configure(bg="#f8f9fa")
-
+        
         self.level = 1
         self.size = 6
         self.words = []
@@ -60,41 +60,33 @@ class WordSearchGame:
         self.hints_left = 10
         self.menu_frame = None
         self.game_frame = None
-        self.word_labels = {}  
-
+        self.word_labels = {}
+        
         self.show_main_menu()
 
     def show_main_menu(self):
         if self.game_frame: self.game_frame.destroy()
         if self.menu_frame: self.menu_frame.destroy()
-
         self.menu_frame = tk.Frame(self.root, bg="#f8f9fa")
         self.menu_frame.pack(fill="both", expand=True)
-
-        tk.Button(self.menu_frame, text="⚙ Настройки", font=("Arial", 10),
-                  bg="#ecf0f1", fg="#2c3e50", relief="flat",
-                  command=self.open_settings).pack(anchor="ne", padx=20, pady=10)
-
+        
         title = tk.Label(self.menu_frame, text="ГОЛОВОЛОМКА:\nПОИСК СЛОВ",
-                         font=("Arial", 36, "bold"), bg="#f8f9fa", fg="#2c3e50", justify="center")
+                         font=("Arial", 36, "bold"), bg="#f8f9fa", fg="#191c20", justify="center")
         title.pack(pady=80)
-
+        
         level_text = tk.Label(self.menu_frame, text=f"ТЕКУЩИЙ УРОВЕНЬ\n{self.level}",
-                              font=("Arial", 20, "bold"), bg="#f8f9fa", fg="#34495e")
+                              font=("Arial", 20, "bold"), bg="#f8f9fa", fg="#090a0b")
         level_text.pack(pady=30)
-
+        
         play_btn = tk.Button(self.menu_frame, text="ИГРАТЬ (PLAY) ▶",
-                             font=("Arial", 18, "bold"), bg="#2c3e50", fg="white",
+                             font=("Arial", 18, "bold"), bg="#0f0f0f", fg="white",
                              width=22, height=2, relief="flat", command=self.start_game)
         play_btn.pack(pady=40)
-
-    def open_settings(self):
-        messagebox.showinfo("Настройки", "Настройки пока в разработке")
 
     def start_game(self):
         if self.menu_frame:
             self.menu_frame.destroy()
-        self.create_game_ui()
+        self.setup_game_interface()   
         self.new_game()
 
     def back_to_menu(self):
@@ -104,84 +96,81 @@ class WordSearchGame:
                 self.game_frame.destroy()
             self.show_main_menu()
 
-    def create_game_ui(self):
+    def setup_game_interface(self):
         self.game_frame = tk.Frame(self.root, bg="#f8f9fa")
         self.game_frame.pack(fill="both", expand=True)
-
+        
         tk.Label(self.game_frame, text="ФИЛВОРДЫ", font=("Arial", 28, "bold"),
-                 bg="#f8f9fa", fg="#2c3e50").pack(pady=8)
+                 bg="#f8f9fa", fg="#0f1318").pack(pady=8)
 
-        game_area = tk.Frame(self.game_frame, bg="#f8f9fa")
-        game_area.pack(fill="both", expand=True, padx=30, pady=10)
+        top_panel = tk.Frame(self.game_frame, bg="#f8f9fa")
+        top_panel.pack(fill="x", padx=40, pady=10)
 
-        self.canvas = tk.Canvas(game_area, bg="#ffffff", highlightthickness=4,
-                                highlightbackground="#2c3e50", relief="solid")
+        info_frame = tk.Frame(top_panel, bg="#f8f9fa")
+        info_frame.pack(side="left")
+
+        self.timer_label = tk.Label(info_frame, text="Время: 00:00",
+                                    font=("Arial", 18, "bold"), bg="#f8f9fa", fg="#403697")
+        self.timer_label.pack(side="left", padx=20)
+
+        self.hints_label = tk.Label(info_frame, text=f"Подсказки: {self.hints_left}",
+                                    font=("Arial", 14, "bold"), bg="#f8f9fa", fg="#7336a9")
+        self.hints_label.pack(side="left", padx=30)
+
+        btn_frame = tk.Frame(top_panel, bg="#f8f9fa")
+        btn_frame.pack(side="right")
+
+        tk.Button(btn_frame, text="Подсказка", font=("Arial", 11, "bold"), bg="#6092C5",
+                  fg="white", width=12, height=2, command=self.hint).pack(side="left", padx=8)
+
+        central_frame = tk.Frame(self.game_frame, bg="#f8f9fa")
+        central_frame.pack(fill="both", expand=True, padx=300, pady=10)
+
+        self.canvas = tk.Canvas(central_frame, bg="#ffffff", highlightthickness=4,
+                                highlightbackground="#07090b", relief="solid")
         self.canvas.pack(fill="both", expand=True)
         self.canvas.bind("<Button-1>", self.on_mouse_down)
         self.canvas.bind("<B1-Motion>", self.on_mouse_drag)
         self.canvas.bind("<ButtonRelease-1>", self.on_mouse_up)
         self.canvas.bind("<Configure>", self.on_resize)
 
-        words_panel = tk.Frame(game_area, bg="#ffffff", relief="solid", bd=2)
-        words_panel.pack(fill="x", pady=(15, 0))
+        words_panel = tk.Frame(central_frame, bg="#ffffff", relief="solid", bd=3)
+        words_panel.pack(pady=15)
 
         tk.Label(words_panel, text="НАЙДИ ЭТИ СЛОВА", font=("Arial", 16, "bold"),
                  bg="#ffffff", fg="#2c3e50").pack(pady=12)
-
+        
         self.words_container = tk.Frame(words_panel, bg="#ffffff")
-        self.words_container.pack(fill="both", expand=True, padx=20, pady=(0, 15))
-
-        side_panel = tk.Frame(game_area, bg="#f8f9fa", width=260)
-        side_panel.pack(side="right", fill="y", padx=(20, 0))
-        side_panel.pack_propagate(False)
-
-        self.timer_label = tk.Label(side_panel, text="Время: 00:00",
-                                    font=("Arial", 16, "bold"), bg="#f8f9fa", fg="#e74c3c")
-        self.timer_label.pack(pady=12)
-
-        self.hints_label = tk.Label(side_panel, text=f"Подсказки: {self.hints_left}",
-                                    font=("Arial", 13, "bold"), bg="#f8f9fa", fg="#e67e22")
-        self.hints_label.pack(pady=8)
-
-        btn_frame = tk.Frame(side_panel, bg="#f8f9fa")
-        btn_frame.pack(pady=20)
-
-        tk.Button(btn_frame, text="Заново", font=("Arial", 11), bg="#3498db",
-                  fg="white", width=14, command=self.reset_level).pack(pady=5)
-        tk.Button(btn_frame, text="Подсказка", font=("Arial", 11), bg="#f39c12",
-                  fg="white", width=14, command=self.hint).pack(pady=5)
+        self.words_container.pack(fill="both", expand=True, padx=25, pady=(0, 18))
 
         bottom_bar = tk.Frame(self.game_frame, bg="#f8f9fa")
-        bottom_bar.pack(fill="x", pady=12)
-
-        self.level_label = tk.Label(bottom_bar, text="Уровень 1 / 100", 
+        bottom_bar.pack(fill="x", pady=15)
+        self.level_label = tk.Label(bottom_bar, text="Уровень 1 / 100",
                                     font=("Arial", 13), bg="#f8f9fa", fg="#2c3e50")
         self.level_label.pack(side="left", padx=30)
-
-        self.found_label = tk.Label(bottom_bar, text="Найдено: 0/0", 
+        self.found_label = tk.Label(bottom_bar, text="Найдено: 0/0",
                                     font=("Arial", 13), bg="#f8f9fa", fg="#2c3e50")
         self.found_label.pack(side="left", padx=30)
-
         tk.Button(bottom_bar, text="ГЛАВНОЕ МЕНЮ", font=("Arial", 12, "bold"),
-                  bg="#95a5a6", fg="white", command=self.back_to_menu).pack(side="right", padx=30)
+                  bg="#19173e", fg="white", command=self.back_to_menu).pack(side="right", padx=30)
 
     def update_word_list(self):
         for widget in self.words_container.winfo_children():
             widget.destroy()
-        
+       
         self.word_labels = {}
-        for idx, word in enumerate(self.words):
+        for word in self.words:
             frame = tk.Frame(self.words_container, bg="#ffffff")
-            frame.pack(fill="x", pady=4, padx=10)
-            
-            check = tk.Label(frame, text="✓" if self.found.get(word, False) else "  ",
-                             font=("Arial", 14, "bold"), bg="#ffffff", fg="#2ecc71", width=2)
+            frame.pack(fill="x", pady=5, padx=10)
+           
+            check = tk.Label(frame, text="✓" if self.found.get(word, False) else " ",
+                             font=("Arial", 15, "bold"), bg="#ffffff", fg="#6870cb", width=2)
             check.pack(side="left")
-            
+           
             lbl = tk.Label(frame, text=word, font=("Arial", 14),
                            bg="#ffffff", fg="#2c3e50", anchor="w")
-            lbl.pack(side="left", padx=5)
-            
+            lbl.pack(side="left", padx=8)
+           
             self.word_labels[word] = (check, lbl)
 
     def update_ui(self):
@@ -206,7 +195,7 @@ class WordSearchGame:
             self.timer_id = None
 
     def get_random_words(self):
-        available = [w for w in WORDS if len(w) <= self.size]   # ← ИСПРАВЛЕНО
+        available = [w for w in WORDS if len(w) <= self.size]
         random.shuffle(available)
         count = LEVEL_CONFIG.get(self.level, {"count": 6})["count"]
         return available[:count]
@@ -219,7 +208,7 @@ class WordSearchGame:
         self.field = [[' ' for _ in range(self.size)] for _ in range(self.size)]
         self.placed = []
         used_positions = set()
-
+        
         for word in self.words:
             placed_ok = False
             for _ in range(max_attempts):
@@ -233,7 +222,7 @@ class WordSearchGame:
                 else:
                     row = random.randint(len(word) - 1, self.size - 1)
                     col = random.randint(0, self.size - 1)
-
+                
                 can_place = True
                 positions = []
                 for i in range(len(word)):
@@ -243,7 +232,7 @@ class WordSearchGame:
                     if (r, c) in used_positions or (self.field[r][c] != ' ' and self.field[r][c] != word[i]):
                         can_place = False
                         break
-
+                
                 if can_place:
                     for i, ch in enumerate(word):
                         r, c = positions[i]
@@ -256,7 +245,7 @@ class WordSearchGame:
                     break
             if not placed_ok:
                 return self.generate_field()
-
+        
         for i in range(self.size):
             for j in range(self.size):
                 if self.field[i][j] == ' ':
@@ -269,49 +258,40 @@ class WordSearchGame:
         self.found = {w: False for w in self.words}
         self.word_colors = {}
         self.selected_cells = []
-        self.generate_field()
-        self.update_ui()
-        self.draw_field()
-        self.start_timer()
-
-    def reset_level(self):
-        self.stop_timer()
-        self.selected_cells = []
-        self.found = {w: False for w in self.words}
-        self.word_colors = {}
+        self.hints_left = max(self.hints_left, 3)
+        self.update_hints_label()
         self.generate_field()
         self.update_ui()
         self.draw_field()
         self.start_timer()
 
     def update_hints_label(self):
-        self.hints_label.config(text=f"Подсказки: {self.hints_left}")
+        color = "#3d3c92" if self.hints_left > 3 else "#6930b4"
+        self.hints_label.config(text=f"Подсказки: {self.hints_left}", fg=color)
 
     def draw_field(self):
         self.canvas.delete("all")
         if not self.field: return
-
         w = self.canvas.winfo_width()
         h = self.canvas.winfo_height()
-        self.cell_size = max(38, min(72, min(w, h) // self.size - 10))
-
+        self.cell_size = max(50, min(100, min(w, h) // self.size - 10))
         total_w = self.cell_size * self.size
         total_h = self.cell_size * self.size
         offset_x = (w - total_w) // 2
         offset_y = (h - total_h) // 2
-
         self.cell_rects = {}
+        
         for i in range(self.size):
             for j in range(self.size):
                 x1 = offset_x + j * self.cell_size
                 y1 = offset_y + i * self.cell_size
                 x2 = x1 + self.cell_size
                 y2 = y1 + self.cell_size
-
+                
+                color = None
                 if (i, j) in self.selected_cells:
                     color = self.current_highlight_color
                 else:
-                    color = None
                     for word, r0, c0, dr, dc, word_clr in self.placed:
                         if self.found.get(word, False):
                             for k in range(len(word)):
@@ -320,7 +300,7 @@ class WordSearchGame:
                                     break
                         if color: break
                     color = color or "#ecf0f1"
-
+                
                 self.canvas.create_rectangle(x1, y1, x2, y2, fill=color, outline="#2c3e50", width=2)
                 self.canvas.create_text(x1 + self.cell_size//2, y1 + self.cell_size//2,
                                         text=self.field[i][j],
@@ -332,14 +312,12 @@ class WordSearchGame:
         if len(cells) < 2: return None
         rows = [p[0] for p in cells]
         cols = [p[1] for p in cells]
-
         if len(set(rows)) == 1:
             r = rows[0]
             sorted_cells = sorted(cells, key=lambda x: x[1])
             word = ''.join(self.field[r][c] for (r, c) in sorted_cells)
             if word in self.found: return word
             if word[::-1] in self.found: return word[::-1]
-
         if len(set(cols)) == 1:
             c = cols[0]
             sorted_cells = sorted(cells, key=lambda x: x[0])
@@ -368,13 +346,11 @@ class WordSearchGame:
                         break
                 self.update_ui()
                 self.draw_field()
-
                 if all(self.found.values()):
                     self.stop_timer()
                     self.hints_left += 1
                     self.update_hints_label()
                     self.root.after(600, self.next_level_auto)
-
         self.selected_cells = []
         self.draw_field()
 
@@ -411,18 +387,24 @@ class WordSearchGame:
         if self.hints_left <= 0:
             messagebox.showinfo("Подсказки", "Подсказки закончились!")
             return
+
         for word in self.words:
-            if not self.found[word]:
-                for r in range(self.size):
-                    for c in range(self.size):
-                        if self.field[r][c] == word[0] and not self.is_cell_used_in_found_word(r, c):
-                            self.selected_cells = [(r, c)]
-                            self.current_highlight_color = "#3e3479"
-                            self.draw_field()
-                            self.root.after(1600, self.clear_hint)
-                            self.hints_left -= 1
-                            self.update_hints_label()
-                            return
+            if self.found.get(word, False):
+                continue
+
+            for placed_word, r0, c0, dr, dc, _ in self.placed:
+                if placed_word == word:
+                    self.selected_cells = [(r0, c0)]
+                    self.current_highlight_color = "#8a47ff"
+                    self.draw_field()
+
+                    self.root.after(1500, self.clear_hint)
+                    
+                    self.hints_left -= 1
+                    self.update_hints_label()
+                    return
+
+        messagebox.showinfo("Подсказка", "Все слова уже найдены!")
 
     def next_level_auto(self):
         if self.level < 100:
